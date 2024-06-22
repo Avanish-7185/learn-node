@@ -1,0 +1,24 @@
+Asynchronous methods are handled in two different ways in NODE.
+Libuv is the dependency for node to run async methods
+
+1. Native async mechanism
+    Whenever possible, Libuv will use native async mechanisms in the OS so as to avoid blocking
+    the main thread
+    Since this is part of the kernel, there is different mechanism for each OS. We have epoll for
+    Linux, Kqueue for MacOS and IO Completion Port on Windows
+    his includes network I/O, some types of file I/O, timers, and some inter-process communications. Here's how it works:
+
+    How Native Async I/O Works:
+    Event Loop: At the core of Node.js's asynchronous behavior is the event loop. The event loop is an infinite loop that waits for events and then dispatches them to the appropriate handlers.
+    Non-blocking APIs: Node.js provides non-blocking APIs for network I/O operations (such as HTTP requests and responses, TCP/UDP sockets), timers, and some file I/O operations.
+    OS Kernel: When a non-blocking operation is requested (e.g., reading from a network socket), the request is passed to the OS kernel. The kernel can handle this I/O operation in an asynchronous manner.
+    Callback Mechanism: Once the OS completes the I/O operation, it notifies Node.js, which then invokes the callback associated with the operation. This callback is placed in the event loop's queue to be processed.
+
+
+2. Thread pool
+    If there is no native async support and the task is file 1/0 or CPU intensive, Iibuv
+    uses the thread pool to avoid blocking the main thread
+    Ithough the thread pool preserves asynchronicity with respect to Node's main
+    hread, it can still become a bottleneck if all threads are busy
+
+    Example file i/o , crypto hashing (pbkdf2)
