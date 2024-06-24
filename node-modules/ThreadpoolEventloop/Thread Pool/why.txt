@@ -1,7 +1,7 @@
-Asynchronous methods are handled in two different ways in NODE.
-Libuv is the dependency for node to run async methods
+Asynchronous code  are handled in two different ways in NODE.
+Libuv is a library and  the dependency for node to run async code
 
-1. Native async mechanism
+1. Native async mechanism (Priority 1st)
     Whenever possible, Libuv will use native async mechanisms in the OS so as to avoid blocking
     the main thread
     Since this is part of the kernel, there is different mechanism for each OS. We have epoll for
@@ -15,10 +15,20 @@ Libuv is the dependency for node to run async methods
     Callback Mechanism: Once the OS completes the I/O operation, it notifies Node.js, which then invokes the callback associated with the operation. This callback is placed in the event loop's queue to be processed.
 
 
-2. Thread pool
+2. Thread pool(Priority 2 , after native async mechanism failed to handel task)
     If there is no native async support and the task is file 1/0 or CPU intensive, Iibuv
     uses the thread pool to avoid blocking the main thread
     Ithough the thread pool preserves asynchronicity with respect to Node's main
     hread, it can still become a bottleneck if all threads are busy
 
     Example file i/o , crypto hashing (pbkdf2)
+
+
+A Asynchronous code have 2 parts => the actual part or the i/o part ( file i/o , network i/o etc etc) AND a callback function part
+
+As the Async part is complete by the Native Async Mechanism or by Thread pool => Libuv tells task is completed now it the time to
+execute the callbacks associated to it and then comes the Event Loop which manages the callabcks based on categories and priority.
+
+eg =>  setTimeout(()=>console.log("hello"),100)    //here these 100  ms delay is managed by libuv then the callback is sent to Event loop
+
+fs.readFile("/index.php",()=>{console.log("Reading is completed)})   //here when file read is completed then the callback is sent to the evnt loop

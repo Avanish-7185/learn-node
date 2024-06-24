@@ -1,0 +1,30 @@
+There are two main parts to the runtime: the V8 engine and libuv. 
+    The V8 engine is responsible for executing JavaScript code. 
+    Libuv is responsible for handling asynchronous operations( Native async mechanism or cpu thread pool)
+
+When an asynchronous operation is encountered in JavaScript code, it is offloaded to libuv. 
+Libuv will then run the task using native asynchronous mechanisms of the operating system. 
+    # Once the asynchronous operation is complete, libuv will call a callback function that was provided by the JavaScript code.
+    # Callback functions are only executed when the call stack is empty. (Means first sync code is executed and then async's callback are executed because async call is handeled by Libuv now its time to manage the callbacks of those async)
+    # The normal flow of execution will not be interrupted to run a callback function. 
+    
+
+Event loop is a loop that is alive as long as your Node.js application is up and running.
+In every iteration of the loop, the event loop checks a number of different queues for callback functions that need to be executed. 
+
+The order in which the queues are checked is as follows as the given priority:
+
+1)Micro task queues (Next tick queue and Promise queue)
+2)Timer queue
+3)Micro task queues (Next tick queue and Promise queue)
+4)I/O queue
+5)Micro task queues (Next tick queue and Promise queue)
+6)Check queue
+7)Micro task queues (Next tick queue and Promise queue)
+8)Close queue
+9)Micro task queues (Next tick queue and Promise queue)
+
+
+this is because Micro Task Queue is not the part of Libuv library so it is checked by Other mechanism after each queue cheked and Micro Task Queue has the heighest priority.
+
+Additionally, timer callbacks are executed before I/O callbacks, even if both are ready at the same time.
