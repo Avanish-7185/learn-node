@@ -1,0 +1,69 @@
+installed packages are stored in node-modules folder
+
+that package's description ( name,version etc etc) stored in the package.json and package-lock.json of the current project directory
+
+
+Versioning Rules=> x.y.x==> major.minor.patch
+            
+            
+            1)When you fix a bug and the code stays backwards-compatible you increment the
+            patch version.
+            For example 1.1.1 to 1.1.2
+            
+            2)When you add new functionality but the code still stays backwards-compatible,
+            you increment the minor version
+            You also reset the patch version to zero
+            For example 1.1.1 to 1.2.0
+            
+            3)When you make changes and the code is no more backwards compatible, you
+            increment the major version
+            You have to reset the minor and patch version to zero
+            For example 1.1.1 to 2.0.0.
+
+
+            Semantic versioning always starts with 0.1.0
+
+            O.Y.Z (a major version of zero) is used for initial development
+
+            When the code is production-ready, you increment to version 1.0.0
+
+            Even the simplest of changes has to be done with an increase in the version
+            number
+
+    Versioning also uses some symbols before version like "^2..2.2" or "*2.2.2" etc
+
+
+Local vs Global modules=>
+                        
+                        Local packages are installed locally in the porject folder like upper-case package
+                        but sometime we need to install global package to use it on our all project or need to use it on terminal
+
+                        Global package are those packages that will be install directly on our PATH directory so we can use it on terminal (eg=> NODEMON)
+                         to install global package =>
+                                                     npm install -g NODEMON 
+                                                     npm uninstall -g NODEMON
+                
+
+Scripts=> 
+            An npm script is a convenient way to bundle common commands for use in a project
+            They are typically entered in the command line in order to do something with the
+            application
+                        
+            npm scripts are stored in a project's package.json file, giving access to everyone who
+            has access to the codebase=> it define few keywords that we will run and will run another functionality without diving on how to use that functionaltiy
+
+            They also ensure that everyone is using the same command with the same options
+            Common use cases for npm scripts include building your project, starting a development
+            server, compiling CSS, linting, minifying etc
+            npm scripts are executed using the command   npm run <SCRIPT NAME>
+
+            eg=>  npm run abc
+             in package.json=>  "scripts": {
+                                    "test": "echo \"Error: no test specified\" && exit 1",
+                                    "abc":"node index.js"
+                                }
+                so abc will run => node index.js which will run the file index.js and function Hello() inside it
+
+
+We can publish our own NPM packages in few steps
+                
